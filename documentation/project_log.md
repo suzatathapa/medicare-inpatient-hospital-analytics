@@ -146,3 +146,36 @@ The goal is to produce a clean, documented Table 1 dataset that can be used for 
 
 After the Table 1 workflow is validated, the same data preparation approach will be extended to the other selected CMS tables.
 
+## Step 5D.1 — Inspect Table 1 Structure
+
+I used Python to inspect the raw structure of the 2023 CMS Medicare Inpatient Hospital Table 1 before performing any transformations.
+
+### Findings
+
+The raw 2023 Table 1 contains 36 rows and 28 columns.
+
+The worksheet is not immediately analysis-ready. The first rows contain report titles and reporting-period information before the actual column headers.
+
+The table contains 28 measures related to Medicare inpatient hospital utilization, enrollment, program payments, cost sharing, and other utilization measures.
+
+The observations are organized hierarchically by entitlement category and calendar year. For example, an entitlement category such as `All Beneficiaries` is followed by separate observations for calendar years 2018 through 2023.
+
+### Data Preparation Implications
+
+The cleaning process will need to:
+
+- Remove report-title and formatting rows
+- Identify and assign the correct column headers
+- Separate entitlement category from calendar year
+- Propagate entitlement categories to their corresponding annual observations
+- Remove blank and non-data rows
+- Standardize column names
+- Convert appropriate measures to numeric data types
+- Preserve CMS suppression indicators during processing
+- Validate the cleaned output against the original CMS table
+
+### What I Learned
+
+I learned why inspecting raw data before cleaning is important. Although the Excel worksheet visually represents a report, its structure is different from an analysis-ready dataset.
+
+I also learned that hierarchical report layouts may require transformation before the data can be analyzed with SQL, Python, or Tableau.
