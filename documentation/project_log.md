@@ -95,9 +95,29 @@ The script:
 
 ```bash
 python3 -m pip install pandas openpyxl
+```
 
+```bash
+python3 python/prepare_cms_data.py
+```
 
-Next Step — Extract and Standardize CMS Table 1
+### Result
+
+The script ran successfully and confirmed that Python could access the CMS source files.
+
+The inspection also showed that the CMS files are not packaged the same way across all years. Some years contain multiple Excel files inside ZIP archives, while later years contain multiple tables as worksheets within a workbook.
+
+### What I Learned
+
+I learned how to:
+
+- Run a Python script from Terminal
+- Install Python packages with pip
+- Use `pandas` to inspect Excel workbooks
+- Use Python's `zipfile` module to inspect ZIP archives
+- Work with inconsistent real-world file structures
+- Verify source data before performing transformations
+## Next Step — Extract and Standardize CMS Table 1
 
 The next phase of the project will begin the actual data preparation process.
 
@@ -125,11 +145,4 @@ Because the annual files contain overlapping reporting periods, simply combining
 The goal is to produce a clean, documented Table 1 dataset that can be used for SQL analysis and Tableau visualization.
 
 After the Table 1 workflow is validated, the same data preparation approach will be extended to the other selected CMS tables.
-
-
-
-
-
-
-
 
