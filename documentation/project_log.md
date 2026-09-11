@@ -179,3 +179,77 @@ The cleaning process will need to:
 I learned why inspecting raw data before cleaning is important. Although the Excel worksheet visually represents a report, its structure is different from an analysis-ready dataset.
 
 I also learned that hierarchical report layouts may require transformation before the data can be analyzed with SQL, Python, or Tableau.
+
+
+## Step 5D — Clean and Validate CMS Table 1
+
+I inspected, cleaned, validated, and exported the 2023 CMS Medicare Inpatient Hospital Table 1 using Python.
+
+### What I Did
+
+- Opened the 2023 CMS ZIP archive with Python
+- Located the Excel workbook inside the archive
+- Identified the Table 1 worksheet
+- Read the worksheet without headers to inspect its raw structure
+- Identified the true header row
+- Removed title and formatting rows
+- Separated entitlement category from calendar year
+- Forward-filled entitlement categories to their corresponding annual observations
+- Removed non-data rows
+- Converted calendar year values to integers
+- Reordered identifying fields so `Entitlement_Type` and `Calendar_Year` appear first
+- Added automated data quality checks
+- Exported the cleaned dataset to:
+
+`data/cleaned/cms_table1_2023_cleaned.csv`
+
+### Validation Results
+
+The cleaned dataset contains:
+
+- 18 observations
+- 29 columns
+- 3 entitlement categories:
+  - All Beneficiaries
+  - Aged Beneficiaries
+  - Disabled Beneficiaries
+- Calendar years 2018 through 2023
+
+The validation checks confirmed:
+
+- Expected calendar years were present
+- No entitlement categories were missing
+- No duplicate entitlement/year combinations existed
+- The expected 18 observations were produced
+
+### Problems Encountered and Resolutions
+
+**FileNotFoundError**
+
+The first version of the script expected the 2023 CMS source to be a direct Excel file.
+
+**Resolution:**  
+Updated the script to locate the 2023 ZIP archive, open it with Python, and access the Excel workbook inside the archive.
+
+---
+
+**IndentationError**
+
+While updating the Python function, inconsistent indentation caused the script to fail.
+
+**Resolution:**  
+Replaced the affected function using consistent four-space indentation.
+
+### What I Learned
+
+I learned that real-world government data is often distributed in reporting formats rather than analysis-ready tables.
+
+I also learned how to:
+
+- Inspect Excel files programmatically before transformation
+- Read Excel workbooks directly from ZIP archives
+- Identify and remove report formatting rows
+- Transform hierarchical report layouts into structured tabular data
+- Use forward filling to assign category labels to related observations
+- Add automated validation checks with Python assertions
+- Export cleaned data for later SQL and Tableau analysis
