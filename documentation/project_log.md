@@ -253,3 +253,59 @@ I also learned how to:
 - Use forward filling to assign category labels to related observations
 - Add automated validation checks with Python assertions
 - Export cleaned data for later SQL and Tableau analysis
+
+
+
+## Step 5D — Clean and Validate CMS Table 1
+
+I inspected, cleaned, validated, and exported the 2023 CMS Medicare Inpatient Hospital Table 1 using Python.
+
+### What I Did
+
+- Opened the 2023 CMS ZIP archive with Python
+- Located the Excel workbook inside the archive
+- Identified the Table 1 worksheet
+- Read the worksheet without headers to inspect its raw structure
+- Identified the actual header row
+- Removed report title, blank, and formatting rows
+- Separated entitlement category from calendar year
+- Forward-filled entitlement categories to their corresponding annual observations
+- Converted calendar year values to integers
+- Added automated data quality checks
+- Exported the cleaned dataset to `data/cleaned/cms_table1_2023_cleaned.csv`
+
+### Validation Results
+
+The cleaned dataset contains:
+
+- 18 observations
+- 29 columns
+- 3 entitlement categories: All Beneficiaries, Aged Beneficiaries, and Disabled Beneficiaries
+- Calendar years 2018 through 2023
+
+The validation checks confirmed:
+
+- Expected calendar years were present
+- No entitlement categories were missing
+- No duplicate entitlement/year combinations existed
+- The expected 18 observations were produced
+
+### Problems Encountered and Resolutions
+
+**FileNotFoundError**
+
+The initial script expected the 2023 CMS source to be a direct Excel workbook, but the local source file was distributed as a ZIP archive.
+
+**Resolution:** Updated the Python workflow to locate the 2023 ZIP archive, open the archive, locate the Excel workbook inside it, and read Table 1 from the workbook.
+
+**IndentationError**
+
+While modifying the Python function, inconsistent indentation caused the script to fail.
+
+**Resolution:** Replaced the affected code using consistent four-space Python indentation.
+
+### What I Learned
+
+I learned that real-world government datasets may be distributed and formatted differently from analysis-ready datasets. Inspecting the source structure before transformation helped me avoid making incorrect assumptions about the data.
+
+I also gained hands-on experience reading Excel files from ZIP archives, transforming hierarchical report layouts, forward-filling category values, validating transformed data with Python assertions, and exporting analysis-ready data.
