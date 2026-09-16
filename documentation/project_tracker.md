@@ -18,6 +18,18 @@ Last major milestone completed: Table 1 — 2017–2023 Trend Dataset
 - [x] Connected local project to GitHub
 - [x] Established Git version-control workflow
 
+### Project Documentation & Development Tracking
+
+- [x] Created detailed project development log
+- [x] Documented completed Table 1 data-preparation milestones
+- [x] Documented meaningful errors and their resolutions
+- [x] Created project status tracker
+- [x] Created Terminal, Python, and Git command reference
+- [x] Documented Git repository setup and workflow
+- [x] Documented development troubleshooting lessons
+- [x] Established milestone workflow: inspect → understand → clean → validate → sanity check → document → commit → push
+- [x] Created clean GitHub checkpoint before beginning Table 2
+
 ### Data Collection
 
 - [x] Selected CMS Program Statistics — Medicare Inpatient Hospital as the primary data source
