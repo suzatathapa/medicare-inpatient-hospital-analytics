@@ -280,7 +280,8 @@ The cleaned dataset contains:
 
 - 18 observations
 - 29 columns
-- 3 entitlement categories: All Beneficiaries, Aged Beneficiaries, and Disabled Beneficiaries
+- 3 entitlement categories: All Beneficiaries, Aged Beneficiaries, and Disabled 
+Beneficiaries
 - Calendar years 2018 through 2023
 
 The validation checks confirmed:
@@ -294,18 +295,138 @@ The validation checks confirmed:
 
 **FileNotFoundError**
 
-The initial script expected the 2023 CMS source to be a direct Excel workbook, but the local source file was distributed as a ZIP archive.
+The initial script expected the 2023 CMS source to be a direct Excel workbook, but 
+the local source file was distributed as a ZIP archive.
 
-**Resolution:** Updated the Python workflow to locate the 2023 ZIP archive, open the archive, locate the Excel workbook inside it, and read Table 1 from the workbook.
+**Resolution:** Updated the Python workflow to locate the 2023 ZIP archive, open the 
+archive, locate the Excel workbook inside it, and read Table 1 from the workbook.
 
 **IndentationError**
 
-While modifying the Python function, inconsistent indentation caused the script to fail.
+While modifying the Python function, inconsistent indentation caused the script to
+ fail.
 
-**Resolution:** Replaced the affected code using consistent four-space Python indentation.
+**Resolution:** Replaced the affected code using consistent four-space Python 
+indentation.
 
 ### What I Learned
 
-I learned that real-world government datasets may be distributed and formatted differently from analysis-ready datasets. Inspecting the source structure before transformation helped me avoid making incorrect assumptions about the data.
+I learned that real-world government datasets may be distributed and formatted 
+differently from analysis-ready datasets. Inspecting the source structure before 
+transformation helped me avoid making incorrect assumptions about the data.
 
-I also gained hands-on experience reading Excel files from ZIP archives, transforming hierarchical report layouts, forward-filling category values, validating transformed data with Python assertions, and exporting analysis-ready data.
+I also gained hands-on experience reading Excel files from ZIP archives, transforming
+ hierarchical report layouts, forward-filling category values, validating transformed 
+ data with Python assertions, and exporting analysis-ready data.
+
+
+## Step 5E — Build the 2017–2023 Table 1 Trend Dataset
+
+I inspected the 2017 CMS Medicare Inpatient Hospital Table 1 and compared its structure with the cleaned 2023 Table 1 before combining the datasets.
+
+### What I Did
+
+- Opened the 2017 CMS ZIP archive with Python
+- Located the Table 1 Excel workbook inside the archive
+- Inspected the raw 2017 Table 1 structure
+- Confirmed that the 2017 and 2023 Table 1 files both contained 28 source columns
+- Confirmed that the 2017 release contains calendar years 2012–2017
+- Compared the cleaned 2017 and 2023 column names
+- Identified four column-name differences caused by CMS footnote formatting
+- Standardized the 2017 column names to match the 2023 schema
+- Cleaned entitlement category labels by removing leading and trailing whitespace
+- Selected calendar year 2017 from the 2017 release
+- Used calendar years 2018–2023 from the 2023 release
+- Combined the datasets into a single 2017–2023 trend dataset
+- Added validation checks for years, categories, duplicates, and expected row count
+- Performed a final sanity check on enrollment, utilization, discharge, and program payment measures
+- Exported the final dataset to `data/cleaned/cms_table1_2017_2023_cleaned.csv`
+
+### Overlapping Reporting Years
+
+CMS Table 1 annual releases contain overlapping historical reporting periods.
+
+The 2017 release contains calendar years 2012–2017, while the 2023 release contains calendar years 2018–2023.
+
+Rather than stacking annual releases and creating duplicate observations, I used:
+
+- Calendar year 2017 from the 2017 release
+- Calendar years 2018–2023 from the 2023 release
+
+This produced one observation per entitlement category and calendar year for the 2017–2023 analysis period.
+
+### Schema Differences Identified
+
+The cleaned 2017 and 2023 datasets both contained 29 columns, but four column names differed because CMS used different footnote formatting between releases.
+
+Examples included:
+
+- `Persons With Coinsurance 1` vs. `Persons With Coinsurance¹`
+- `Coinsurance Days Per Person With Coinsurance 1` vs. `Coinsurance Days Per Person With Coinsurance¹`
+- `Coinsurance Payments Per Person With Coinsurance 1` vs. `Coinsurance Payments Per Person With Coinsurance¹`
+- `Persons with Lifetime Reserve Days 2` vs. `Persons with Lifetime Reserve Days²`
+
+I standardized the 2017 column names before combining the datasets.
+
+### Problem Encountered — Inconsistent Category Whitespace
+
+During validation, the combined dataset failed the expected entitlement-category check.
+
+Python identified five unique category values instead of the expected three because some category labels contained trailing spaces:
+
+- `Aged Beneficiaries`
+- `Aged Beneficiaries `
+- `Disabled Beneficiaries`
+- `Disabled Beneficiaries `
+
+### Resolution
+
+I used Python string cleaning with `.str.strip()` to remove leading and trailing whitespace from the entitlement category values before combining the datasets.
+
+I reran the validation checks after the correction, and the dataset passed successfully.
+
+The diagnostic code used to identify the whitespace issue was retained as comments in
+ the Python script for development reference.  
+
+### Final Validation Results
+
+The final combined dataset contains:
+
+- 21 observations
+- 29 columns
+- 3 entitlement categories
+- Calendar years 2017 through 2023
+- 7 observations per entitlement category
+
+The validation checks confirmed:
+
+- Expected calendar years were present
+- Exactly three entitlement categories were present
+- No entitlement categories were missing
+- No duplicate entitlement/year combinations existed
+- The expected 21 observations were produced
+- The 2017 and 2023 schemas matched after standardization
+
+A final sanity check was also performed on selected measures including Original 
+Medicare Part A enrollment, persons with utilization, discharges, and total program 
+payments.
+
+### What I Learned
+
+I learned why historical government data releases should be inspected before they are
+ combined. Annual CMS releases can contain overlapping reporting periods, so simply 
+ appending files can introduce duplicate observations.
+
+I also learned how small schema differences, such as footnote formatting and trailing 
+whitespace, can cause otherwise equivalent values to be treated differently during 
+analysis.
+
+Using schema comparisons, diagnostic output, string standardization, and automated 
+assertions helped identify and resolve these issues before producing the final 
+analysis-ready dataset.
+
+
+
+
+
+
